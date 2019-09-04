@@ -48,43 +48,6 @@ class Jmweb {
   }
 
   /**
-   * 数组是否相等
-   * @param {Array} a
-   * @param {Array} b
-   * @returns {boolean}
-   */
-  arrEqual (a, b) {
-    // 判断数组的长度
-    if (a.length !== b.length) {
-      return false
-    } else {
-      // 循环遍历数组的值进行比较
-      for (let i = 0; i < a.length; i++) {
-        if (a[i] !== b[i]) {
-          return false
-        }
-      }
-      return true
-    }
-  }
-
-  /**
-   * 查找字符串某个值出现多少次
-   * @param {string} str 查找目标母体
-   * @param {string} val 查找目标指定值
-   * @returns {number}
-   */
-  getStrNum (str, val) {
-    let num = 0;
-    for(let i = 0; i < str.length; i++){
-      if(str[i] === val){
-        num++
-      }
-    }
-    return num
-  }
-
-  /**
    * 区分ios和安卓返回的数据转为对象
    * @param  {object} data 需要被转换的字符串
    */
@@ -213,22 +176,84 @@ class Jmweb {
       window[method][children](data);
     } else {}
   }
+
+  /**
+   * @returns {String} 当前浏览器名称
+   */
+  getExplorer () {
+    const ua = window.navigator.userAgent;
+    const isExplorer = (exp) => {
+      return ua.indexOf(exp) > -1
+    };
+    if (isExplorer('MSIE')) return 'IE';
+    else if (isExplorer('Firefox')) return 'Firefox';
+    else if (isExplorer('Chrome')) return 'Chrome';
+    else if (isExplorer('Opera')) return 'Opera';
+    else if (isExplorer('Safari')) return 'Safari'
+  }
+
+  /**
+   * @description 绑定事件 on(element, event, handler)
+   */
+  on = (function () {
+    if (document.addEventListener) {
+      return function (element, event, handler) {
+        if (element && event && handler) {
+          element.addEventListener(event, handler, false)
+        }
+      }
+    } else {
+      return function (element, event, handler) {
+        if (element && event && handler) {
+          element.attachEvent('on' + event, handler)
+        }
+      }
+    }
+  })()
+
+  /**
+   * @description 解绑事件 off(element, event, handler)
+   */
+  off = (function () {
+    if (document.removeEventListener) {
+      return function (element, event, handler) {
+        if (element && event) {
+          element.removeEventListener(event, handler, false)
+        }
+      }
+    } else {
+      return function (element, event, handler) {
+        if (element && event) {
+          element.detachEvent('on' + event, handler)
+        }
+      }
+    }
+  })()
 }
 
 /**
- * 原tools.js
- * @type {{formatDate: (function(*, *=): *), hasOneOf: (function(Array, Array): boolean), forEach: Jmweb.tools.forEach, isMillisecond: (function(Number): boolean), off: Function, getIntersection: (function(Array, Array): []), oneOf: Jmweb.tools.oneOf, getRelativeTime: (function((String|Number)): *), getExplorer: Jmweb.tools.getExplorer, getUnion: (function(Array, Array): *[]), getHandledValue: (function(Number): *), getDate: (function(Number, Number): string), isEarly: (function(Number, Number): boolean), on: Function}}
+ * 数组处理
+ * @type {{hasOneOf: (function(Array, Array): boolean), isEqual: Jmweb.array.isEqual, getUnion: (function(Array, Array): *[]), getIntersection: (function(Array, Array): [])}}
  */
-Jmweb.prototype.tools = {
-  forEach: (arr, fn) => {
-    if (!arr.length || !fn) {
-      return
-    }
-    let i = -1;
-    let len = arr.length;
-    while (++i < len) {
-      let item = arr[i];
-      fn(item, i, arr)
+Jmweb.prototype.array = {
+  /**
+   * 数组是否相等
+   * @param {Array} a
+   * @param {Array} b
+   * @returns {boolean}
+   */
+  isEqual: function (a, b) {
+    // 判断数组的长度
+    if (a.length !== b.length) {
+      return false
+    } else {
+      // 循环遍历数组的值进行比较
+      for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) {
+          return false
+        }
+      }
+      return true
     }
   },
 
@@ -237,7 +262,7 @@ Jmweb.prototype.tools = {
    * @param {Array} arr2
    * @description 得到两个数组的交集, 两个数组的元素为数值或字符串
    */
-  getIntersection: (arr1, arr2) => {
+  getIntersection: function (arr1, arr2) {
     let len = Math.min(arr1.length, arr2.length);
     let i = -1;
     let res = [];
@@ -253,7 +278,7 @@ Jmweb.prototype.tools = {
    * @param {Array} arr2
    * @description 得到两个数组的并集, 两个数组的元素为数值或字符串
    */
-  getUnion: (arr1, arr2) => {
+  getUnion: function(arr1, arr2) {
     return Array.from(new Set([...arr1, ...arr2]))
   },
 
@@ -262,23 +287,51 @@ Jmweb.prototype.tools = {
    * @param {Array} arr 需要查询的数组
    * @description 判断要查询的数组是否至少有一个元素包含在目标数组中
    */
-  hasOneOf: (target, arr) => {
+  hasOneOf: function (target, arr) {
     return target.some(_ => arr.indexOf(_) > -1)
+  }
+};
+
+/**
+ * 字符串处理
+ * @type {{oneOf: Jmweb.string.oneOf, getOneLen: (function(string, string): number)}}
+ */
+Jmweb.prototype.string = {
+  /**
+   * 查找字符串某个值出现多少次
+   * @param {string} str 查找目标母体
+   * @param {string} val 查找目标指定值
+   * @returns {number}
+   */
+  getOneLen: function(str, val) {
+    let num = 0;
+    for(let i = 0; i < str.length; i++){
+      if(str[i] === val){
+        num++
+      }
+    }
+    return num
   },
 
   /**
    * @param {String|Number} value 要验证的字符串或数值
    * @param {*} validList 用来验证的列表
    */
-  oneOf: (value, validList) => {
+  oneOf: function(value, validList) {
     for (let i = 0; i < validList.length; i++) {
       if (value === validList[i]) {
         return true
       }
     }
     return false
-  },
+  }
+};
 
+/**
+ * 时间处理
+ * @type {{formatDate: (function(*, *=): *), getRelativeTime: (function((String|Number)): *), getHandledValue: (function(Number): *), getDate: (function(Number, Number): string), isMillisecond: (function(Number): boolean), isEarly: (function(Number, Number): boolean)}}
+ */
+Jmweb.prototype.date = {
   /**
    * @param {Number} timeStamp 判断时间戳格式是否是毫秒
    * @returns {Boolean}
@@ -358,59 +411,6 @@ Jmweb.prototype.tools = {
     else resStr = this.getDate(timeStamp, 'year');
     return resStr
   },
-
-  /**
-   * @returns {String} 当前浏览器名称
-   */
-  getExplorer: () => {
-    const ua = window.navigator.userAgent;
-    const isExplorer = (exp) => {
-      return ua.indexOf(exp) > -1
-    };
-    if (isExplorer('MSIE')) return 'IE';
-    else if (isExplorer('Firefox')) return 'Firefox';
-    else if (isExplorer('Chrome')) return 'Chrome';
-    else if (isExplorer('Opera')) return 'Opera';
-    else if (isExplorer('Safari')) return 'Safari'
-  },
-
-  /**
-   * @description 绑定事件 on(element, event, handler)
-   */
-  on: (function () {
-    if (document.addEventListener) {
-      return function (element, event, handler) {
-        if (element && event && handler) {
-          element.addEventListener(event, handler, false)
-        }
-      }
-    } else {
-      return function (element, event, handler) {
-        if (element && event && handler) {
-          element.attachEvent('on' + event, handler)
-        }
-      }
-    }
-  })(),
-
-  /**
-   * @description 解绑事件 off(element, event, handler)
-   */
-  off: (function () {
-    if (document.removeEventListener) {
-      return function (element, event, handler) {
-        if (element && event) {
-          element.removeEventListener(event, handler, false)
-        }
-      }
-    } else {
-      return function (element, event, handler) {
-        if (element && event) {
-          element.detachEvent('on' + event, handler)
-        }
-      }
-    }
-  })(),
 
   /**
    * 时间格式化
@@ -568,6 +568,12 @@ Jmweb.prototype.trackMap = {
 Jmweb.prototype.GPS = {
   PI: 3.14159265358979324,
   x_pi: 3.14159265358979324 * 3000.0 / 180.0,
+  /**
+   *
+   * @param lat
+   * @param lng
+   * @returns {{lng: *, lat: *}}
+   */
   delta: function (lat, lng) {
     // Krasovsky 1940
     //
