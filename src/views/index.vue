@@ -1,5 +1,8 @@
 <template>
-  <div>{{ msg }}</div>
+  <div>
+    <div>{{ msg }}</div>
+    <div class="time">{{ time }}</div>
+  </div>
 </template>
 
 <script>
@@ -7,7 +10,8 @@
     name: 'index',
     data () {
       return {
-        msg: 'index'
+        msg: 'index',
+        time: ''
       }
     },
 
@@ -17,11 +21,7 @@
       console.log(this)
 
       this.storage()
-      // let arr = [{name: 'A', value: '111'}, {name: 'B', value: '222'}]
-      // arr.map(function (value, index, arr) {
-      //   that.$jmweb.setStorage(value.name, value.value)
-      //   console.log('get：', that.$jmweb.getStorage(arr[index].name))
-      // })
+      this.tools()
     },
 
     methods: {
@@ -30,11 +30,23 @@
        */
       storage () {
         const that = this
-        let arr = [{name: 'A', value: '111'}, {name: 'B', value: '222'}]
+        let arr = [{name: 'A', value: '本地缓存111'}, {name: 'B', value: '本地缓存222'}]
         arr.map(function (value, index, arr) {
           that.$jmweb.setStorage(value.name, value.value)
+          that.msg += that.$jmweb.getStorage(arr[index].name)
           console.log('get：', that.$jmweb.getStorage(arr[index].name))
         })
+      },
+
+      /**
+       * tools测试
+       */
+      tools () {
+        const that = this
+        that.time = ' 时间：' + that.$jmweb.tools.formatDate(new Date(),'yyyy-MM-dd hh:mm:ss');
+        setInterval(function () {
+          that.time = ' 时间：' + that.$jmweb.tools.formatDate(new Date(),'yyyy-MM-dd hh:mm:ss');
+        }, 1000)
       }
     }
   }
