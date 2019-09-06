@@ -8,44 +8,24 @@ class Jmweb {
     this.config = config || {}
   }
 
-  /**
-   * 存储localStorage
-   * @param {String} key 存储的键
-   * @param {Object} value 存储的数据
-   */
-  setStorage (key, value) {
-    localStorage.setItem(key, JSON.stringify(value))
-  }
-
-  /**
-   * 获取本地存储
-   * @param {String} key 本地存储的键
-   */
-  getStorage (key) {
-    if (localStorage.getItem(key)) {
-      return JSON.parse(localStorage.getItem(key))
-    } else if (sessionStorage.getItem(key)) {
-      return JSON.parse(sessionStorage.getItem(key))
-    } else {
-      return null
-    }
-  }
-
-  /**
-   * 删除本地存储
-   * @param {String} key 本地存储的键
-   */
-  removeStorage (key) {
-    localStorage.removeItem(key)
-  }
-
-  /**
-   * 全部删除本地存储
-   */
-  clearStorage () {
-    localStorage.clear();
-    sessionStorage.clear()
-  }
+  // request (obj) {
+  //   let json = {
+  //     url: obj.url || '',
+  //     method: obj.method || 'GET',
+  //     contentType: obj.contentType || 'application/json',
+  //     data: obj.data || {}
+  //   }
+  //   return new Promise(function (resolve, reject) {
+  //     axios({
+  //       url: json.url
+  //     }).then(function (res) {
+  //
+  //     }).catch(function (res) {
+  //
+  //     })
+  //   })
+  //
+  // }
 
   /**
    * 区分ios和安卓返回的数据转为对象
@@ -53,6 +33,7 @@ class Jmweb {
    */
   getObject (data) {
     let obj = '';
+    console.log(typeof data)
     if (typeof data != 'object') {
       obj = JSON.parse(data)
     } else {
@@ -229,6 +210,45 @@ class Jmweb {
       }
     }
   })()
+
+  /**
+   * 存储localStorage
+   * @param {String} key 存储的键
+   * @param {Object} value 存储的数据
+   */
+  setStorage (key, value) {
+    localStorage.setItem(key, JSON.stringify(value))
+  }
+
+  /**
+   * 获取本地存储
+   * @param {String} key 本地存储的键
+   */
+  getStorage (key) {
+    if (localStorage.getItem(key)) {
+      return JSON.parse(localStorage.getItem(key))
+    } else if (sessionStorage.getItem(key)) {
+      return JSON.parse(sessionStorage.getItem(key))
+    } else {
+      return null
+    }
+  }
+
+  /**
+   * 删除本地存储
+   * @param {String} key 本地存储的键
+   */
+  removeStorage (key) {
+    localStorage.removeItem(key)
+  }
+
+  /**
+   * 全部删除本地存储
+   */
+  clearStorage () {
+    localStorage.clear();
+    sessionStorage.clear()
+  }
 }
 
 /**
@@ -314,10 +334,10 @@ Jmweb.prototype.string = {
   },
 
   /**
+   * @param {*} validList 用来验证的目标列表
    * @param {String|Number} value 要验证的字符串或数值
-   * @param {*} validList 用来验证的列表
    */
-  oneOf: function(value, validList) {
+  oneOf: function(validList, value) {
     for (let i = 0; i < validList.length; i++) {
       if (value === validList[i]) {
         return true
@@ -336,7 +356,7 @@ Jmweb.prototype.date = {
    * @param {Number} timeStamp 判断时间戳格式是否是毫秒
    * @returns {Boolean}
    */
-  isMillisecond: timeStamp => {
+  isMillisecond: function (timeStamp) {
     const timeStr = String(timeStamp);
     return timeStr.length > 10
   },
@@ -346,7 +366,7 @@ Jmweb.prototype.date = {
    * @param {Number} currentTime 当前时间时间戳
    * @returns {Boolean} 传入的时间戳是否早于当前时间戳
    */
-  isEarly: (timeStamp, currentTime) => {
+  isEarly: function (timeStamp, currentTime) {
     return timeStamp < currentTime
   },
 
@@ -355,7 +375,7 @@ Jmweb.prototype.date = {
    * @returns {String} 处理后的字符串
    * @description 如果传入的数值小于10，即位数只有1位，则在前面补充0
    */
-  getHandledValue: num => {
+  getHandledValue: function (num) {
     return num < 10 ? '0' + num : num
   },
 
@@ -363,8 +383,14 @@ Jmweb.prototype.date = {
    * @param {Number} timeStamp 传入的时间戳
    * @param {Number} startType 要返回的时间字符串的格式类型，传入'year'则返回年开头的完整时间
    */
-  getDate: (timeStamp, startType) => {
-    const d = new Date(timeStamp * 1000);
+  getDate: function (timeStamp, startType) {
+    /* 传入的时间戳如果为秒，则换算为毫秒 */
+    if (this.isMillisecond(timeStamp)) {
+      timeStamp = timeStamp;
+    } else {
+      timeStamp = timeStamp * 1000;
+    }
+    const d = new Date(timeStamp);
     const year = d.getFullYear();
     const month = this.getHandledValue(d.getMonth() + 1);
     const date = this.getHandledValue(d.getDate());
@@ -381,11 +407,11 @@ Jmweb.prototype.date = {
    * @param {String|Number} timeStamp 时间戳
    * @returns {String} 相对时间字符串
    */
-  getRelativeTime: timeStamp => {
+  getRelativeTime: function (timeStamp) {
     // 判断当前传入的时间戳是秒格式还是毫秒
     const IS_MILLISECOND = this.isMillisecond(timeStamp);
     // 如果是毫秒格式则转为秒格式
-    if (IS_MILLISECOND) Math.floor(timeStamp /= 1000);
+    if (IS_MILLISECOND) timeStamp = Math.floor(timeStamp / 1000);
     // 传入的时间戳可以是数值或字符串类型，这里统一转为数值类型
     timeStamp = Number(timeStamp);
     // 获取当前时间时间戳
@@ -418,7 +444,7 @@ Jmweb.prototype.date = {
    * @param fmt
    * @returns {*}
    */
-  formatDate: (date, fmt) => {
+  formatDate: function(date, fmt) {
     let o = {
       'M+': date.getMonth() + 1, // 月份
       'd+': date.getDate(), // 日
@@ -440,6 +466,124 @@ Jmweb.prototype.date = {
 };
 
 /**
+ * 数据缓存 原base.js Cache模块
+ * @type {{getCache: Jmweb.Cache.getCache, setCache: Jmweb.Cache.setCache}}
+ */
+Jmweb.prototype.Cache = {
+  /**
+   * 设置缓存的回调
+   * @param {string} name  // 挂载方法名字
+   * @param {object} params  // param.key ,param.value
+   */
+  setCache: function(name, params) {
+    let obj = Jmweb.prototype.setAppJson(name)
+    obj.key = params.key;
+    obj.data = params.value;
+    console.info(obj);
+    console.info('jm_cache.set');
+    Jmweb.prototype.provider(obj, 'jm_cache', 'set')
+  },
+
+  /**
+   * 设置缓存的回调
+   * @param {string} name  // 挂载方法名字
+   * @param {string} key  // key
+   */
+  getCache: function(name, key) {
+    let obj = Jmweb.prototype.setAppJson(name);
+    obj.key = key;
+    Jmweb.prototype.provider(obj, 'jm_cache', 'get')
+  }
+};
+
+/**
+ * 设备  原base.js Device模块
+ * @type {{sysGetInfo: Jmweb.Device.sysGetInfo}}
+ */
+Jmweb.prototype.Device = {
+  /**
+   * 获取系统信息
+   * @param {string} name
+   */
+  sysGetInfo: function (name) {
+    let obj = Jmweb.prototype.setAppJson(name);
+    Jmweb.prototype.provider(obj, 'jm_device_sys', 'getInfo')
+  }
+};
+
+/**
+ * 页面  原base.js Uinav模块
+ * @type {{newPage: Jmweb.Uinav.newPage, back: Jmweb.Uinav.back, toHome: Jmweb.Uinav.toHome, closePage: Jmweb.Uinav.closePage}}
+ */
+Jmweb.prototype.Uinav = {
+  /**
+   * 新建一个页面
+   * @param {string} name  // 挂载方法名字
+   * @param {string} params  // 参数
+   */
+  newPage: function(name, params) {
+    let obj = Jmweb.prototype.setAppJson(name);
+    obj.url = params.url; //地址
+    obj.param = params.param;  //参数
+    obj.title = params.title;  //次级界面标题
+    obj.playType = params.playType ? params.playType : 0; //0:默认（不使用播放器），1：RTMP，2：TUTK
+    obj.navigationBarHidden = params.navigationBarHidden ? true : false;
+    if(obj.navigationBarBackgroundColor){
+      obj.navigationBarBackgroundColor =  params.navigationBarBackgroundColor; //导航栏背景颜色，如 #000000
+    }
+    if(obj.navigationBarTextStyle){
+      obj.navigationBarTextStyle = params.navigationBarTextStyle; //导航栏标题颜色，仅支持 black / white
+    }
+    Jmweb.prototype.provider(obj, 'jm_uinav', 'newPage')
+  },
+
+  /**
+   * 返回上一个页面（回退）
+   * @param {string} name  // 挂载方法名字
+   * @param {boolean} isReload  // 返回界面是否刷新
+   */
+  back: function (name, isReload) {
+    let obj = Jmweb.prototype.setAppJson(name);
+    obj.isReload = (isReload == 1) ? 1 : 0; //地址
+    Jmweb.prototype.provider(obj, 'jm_uinav', 'back')
+  },
+
+  /**
+   * 关闭界面
+   * @param {string} name  // 挂载方法名字
+   */
+  closePage: function (name) {
+    let obj = Jmweb.prototype.setAppJson(name);
+    Jmweb.prototype.provider(obj, 'jm_uinav', 'closePage')
+  },
+
+  /**
+   * 回到首页
+   * @param {string} name  // 挂载方法名字
+   */
+  toHome: function (name) {
+    let obj = Jmweb.prototype.setAppJson(name);
+    Jmweb.prototype.provider(obj, 'jm_uinav', 'toHome')
+  }
+};
+
+/**
+ * 上传下传  原base.js ediFile模块
+ * @type {{upload: Jmweb.ediFile.upload}}
+ */
+Jmweb.prototype.ediFile = {
+  /**
+   * 上传
+   * @param {string} name  // 挂载方法名字
+   * @param {object} params  // 挂载方法名字
+   */
+  upload: function (name, params) {
+    let obj = Jmweb.prototype.setAppJson(name);
+    Jmweb.prototype.provider(obj, 'jm_edi_file', 'upload')
+  }
+};
+
+/**
  * 原trackMap.js
  * @type {{clearOverlays: Jmweb.trackMap.clearOverlays, addStays: Jmweb.trackMap.addStays, createStays: (function(*, *): []), createMarker: (function(*): BMap.Marker), createPolyline: (function(*=, *): BMap.Polyline), removeOverlay: Jmweb.trackMap.removeOverlay, createPoint: (function(*): BMap.Point), createPoints: (function(*): []), addOverlay: Jmweb.trackMap.addOverlay}}
  */
@@ -449,7 +593,7 @@ Jmweb.prototype.trackMap = {
    * @param latLng
    * @returns {BMap.Point}
    */
-  createPoint: function(latLng) {
+  createPoint: function (latLng) {
     return new BMap.Point(latLng.lng, latLng.lat)
   },
 
@@ -458,7 +602,7 @@ Jmweb.prototype.trackMap = {
    * @param param
    * @returns {BMap.Marker}
    */
-  createMarker: function(param) {
+  createMarker: function (param) {
     let size = param.size || { width: 30, height: 30 }
     let icon = param.icon || new BMap.Icon(param.iconUrl, new BMap.Size(size.width,size.height))
     let offset = param.offset || { left: 0, top: 0 }
@@ -471,7 +615,7 @@ Jmweb.prototype.trackMap = {
    * @param arr
    * @returns {[]}
    */
-  createPoints: function(arr) {
+  createPoints: function (arr) {
     let points = [];
     for (let i = 0; i < arr.length; i++) {
       let point = this.createPoint(arr[i].latLng);
@@ -486,7 +630,7 @@ Jmweb.prototype.trackMap = {
    * @param ops
    * @returns {BMap.Polyline}
    */
-  createPolyline: function(pointArr, ops) {
+  createPolyline: function (pointArr, ops) {
     return new BMap.Polyline(pointArr, {
       strokeColor: ops.color,
       strokeWeight: ops.width,
@@ -500,11 +644,11 @@ Jmweb.prototype.trackMap = {
    * @param points
    * @returns {[]}
    */
-  createStays: function(json,points) {
-    var stays = [];
-    for (var i = 0; i < json.length; i++) {
+  createStays: function (json,points) {
+    let stays = [];
+    for (let i = 0; i < json.length; i++) {
       if (json[i].stay) {
-        var stayItem =trackMap.createMarker({
+        let stayItem = this.createMarker({
           point: points[i],
           iconUrl: '../../static/images/pause.png',
           offset: { left: 0, top: -13 }
@@ -521,9 +665,9 @@ Jmweb.prototype.trackMap = {
    * @param stayMap
    * @param stays
    */
-  addStays: function(stayMap,stays) {
-    for (var i = 0; i < stays.length; i++) {
-      var marker = stays[i];
+  addStays: function (stayMap,stays) {
+    for (let i = 0; i < stays.length; i++) {
+      let marker = stays[i];
       stayMap.addOverlay(marker);
     }
   },
@@ -532,8 +676,8 @@ Jmweb.prototype.trackMap = {
    * 创建多个属性
    * @param map
    */
-  addOverlay: function(map) {
-    for (var i = 1; i < arguments.length; i++) {
+  addOverlay: function (map) {
+    for (let i = 1; i < arguments.length; i++) {
       if (arguments[i]) {
         arguments[0].addOverlay(arguments[i]);
       }
@@ -544,8 +688,8 @@ Jmweb.prototype.trackMap = {
    * 删除设置某个配置
    * @param map
    */
-  removeOverlay: function(map) {
-    for (var i = 1; i < arguments.length; i++) {
+  removeOverlay: function (map) {
+    for (let i = 1; i < arguments.length; i++) {
       if (arguments[i]) {
         arguments[0].removeOverlay(arguments[i]);
       }
@@ -556,7 +700,7 @@ Jmweb.prototype.trackMap = {
    * 清除所有遮盖物
    * @param map
    */
-  clearOverlays: function(map) {
+  clearOverlays: function (map) {
     map.clearOverlays();
   }
 };
@@ -779,124 +923,6 @@ Jmweb.prototype.GPS = {
     ret += (20.0 * Math.sin(x * this.PI) + 40.0 * Math.sin(x / 3.0 * this.PI)) * 2.0 / 3.0;
     ret += (150.0 * Math.sin(x / 12.0 * this.PI) + 300.0 * Math.sin(x / 30.0 * this.PI)) * 2.0 / 3.0;
     return ret
-  }
-};
-
-/**
- * 数据缓存 原base.js Cache模块
- * @type {{getCache: Jmweb.Cache.getCache, setCache: Jmweb.Cache.setCache}}
- */
-Jmweb.prototype.Cache = {
-  /**
-   * 设置缓存的回调
-   * @param {string} name  // 挂载方法名字
-   * @param {object} params  // param.key ,param.value
-   */
-  setCache: function(name, params) {
-    let obj = Jmweb.prototype.setAppJson(name)
-    obj.key = params.key;
-    obj.data = params.value;
-    console.info(obj);
-    console.info('jm_cache.set');
-    Jmweb.prototype.provider(obj, 'jm_cache', 'set')
-  },
-
-  /**
-   * 设置缓存的回调
-   * @param {string} name  // 挂载方法名字
-   * @param {string} key  // key
-   */
-  getCache: function(name, key) {
-    let obj = Jmweb.prototype.setAppJson(name);
-    obj.key = key;
-    Jmweb.prototype.provider(obj, 'jm_cache', 'get')
-  }
-};
-
-/**
- * 设备  原base.js Device模块
- * @type {{sysGetInfo: Jmweb.Device.sysGetInfo}}
- */
-Jmweb.prototype.Device = {
-  /**
-   * 获取系统信息
-   * @param {string} name
-   */
-  sysGetInfo: function (name) {
-    let obj = Jmweb.prototype.setAppJson(name);
-    Jmweb.prototype.provider(obj, 'jm_device_sys', 'getInfo')
-  }
-};
-
-/**
- * 页面  原base.js Uinav模块
- * @type {{newPage: Jmweb.Uinav.newPage, back: Jmweb.Uinav.back, toHome: Jmweb.Uinav.toHome, closePage: Jmweb.Uinav.closePage}}
- */
-Jmweb.prototype.Uinav = {
-  /**
-   * 新建一个页面
-   * @param {string} name  // 挂载方法名字
-   * @param {string} params  // 参数
-   */
-  newPage: function(name, params) {
-    let obj = Jmweb.prototype.setAppJson(name);
-    obj.url = params.url; //地址
-    obj.param = params.param;  //参数
-    obj.title = params.title;  //次级界面标题
-    obj.playType = params.playType ? params.playType : 0; //0:默认（不使用播放器），1：RTMP，2：TUTK
-    obj.navigationBarHidden = params.navigationBarHidden ? true : false;
-    if(obj.navigationBarBackgroundColor){
-      obj.navigationBarBackgroundColor =  params.navigationBarBackgroundColor; //导航栏背景颜色，如 #000000
-    }
-    if(obj.navigationBarTextStyle){
-      obj.navigationBarTextStyle = params.navigationBarTextStyle; //导航栏标题颜色，仅支持 black / white
-    }
-    Jmweb.prototype.provider(obj, 'jm_uinav', 'newPage')
-  },
-
-  /**
-   * 返回上一个页面（回退）
-   * @param {string} name  // 挂载方法名字
-   * @param {string} isReload  // 返回界面是否刷新
-   */
-  back: function (name, isReload) {
-    let obj = Jmweb.prototype.setAppJson(name);
-    obj.isReload = params.isReload == 1 ? 1 : 0; //地址
-    Jmweb.prototype.provider(obj, 'jm_uinav', 'back')
-  },
-
-  /**
-   * 关闭界面
-   * @param {string} name  // 挂载方法名字
-   */
-  closePage: function (name) {
-    let obj = Jmweb.prototype.setAppJson(name);
-    Jmweb.prototype.provider(obj, 'jm_uinav', 'closePage')
-  },
-
-  /**
-   * 回到首页
-   * @param {string} name  // 挂载方法名字
-   */
-  toHome: function (name) {
-    let obj = Jmweb.prototype.setAppJson(name);
-    Jmweb.prototype.provider(obj, 'jm_uinav', 'toHome')
-  }
-};
-
-/**
- * 上传下传  原base.js ediFile模块
- * @type {{upload: Jmweb.ediFile.upload}}
- */
-Jmweb.prototype.ediFile = {
-  /**
-   * 上传
-   * @param {string} name  // 挂载方法名字
-   * @param {object} params  // 挂载方法名字
-   */
-  upload: function (name, params) {
-    let obj = Jmweb.prototype.setAppJson(name);
-    Jmweb.prototype.provider(obj, 'jm_edi_file', 'upload')
   }
 };
 
@@ -1167,4 +1193,4 @@ Jmweb.prototype.jmWifi = {
   }
 };
 
-export default new Jmweb()
+export default Jmweb
