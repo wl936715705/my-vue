@@ -64,7 +64,7 @@ class Jmweb {
 
   /**
    * 区分ios和安卓返回的数据转为对象
-   * @param  {object} data 需要被转换的字符串
+   * @param {object} data 需要被转换的字符串
    */
   getObject (data) {
     let obj = '';
@@ -78,7 +78,7 @@ class Jmweb {
 
   /**
    * 区分ios和安卓将对象转为json
-   * @param  {object} data 需要被转换的对象
+   * @param {object} data 需要被转换的对象
    */
   getJson (data) {
     let obj = '';
@@ -92,8 +92,8 @@ class Jmweb {
 
   /**
    * 通用的请求的数据
-   * @param {string} command  //代表功能类型
-   * @param {string} data   //相关指令所需要的json数据
+   * @param {string} command 代表功能类型
+   * @param {string} data 相关指令所需要的json数据
    */
   getData (command, data) {
     let obj = {
@@ -118,7 +118,7 @@ class Jmweb {
 
   /**
    * 回调事件
-   * @param {object} param  //param.name 挂载方法名字,param.onSuccess 成功回调,param.onFail 失败回调
+   * @param {object} param // param.name 挂载方法名字, param.onSuccess 成功回调, param.onFail 失败回调
    */
   baseCallBack (param) {
     window[param.name] = {
@@ -161,12 +161,6 @@ class Jmweb {
    * @param  {string} onComplete  其他的方法名
    */
   jsonObj (onSuccess, onFail, onComplete) {
-    // let jsonObj = {
-    //   onSuccess: onSuccess,
-    //   onFail: onFail,
-    //   onComplete: onComplete
-    // };
-    // return jsonObj
     return {
         onSuccess: onSuccess,
         onFail: onFail,
@@ -506,11 +500,11 @@ Jmweb.prototype.date = {
 Jmweb.prototype.Cache = {
   /**
    * 设置缓存的回调
-   * @param {string} name  // 挂载方法名字
-   * @param {object} params  // param.key ,param.value
+   * @param {string} name 挂载方法名字
+   * @param {object} params param.key ,param.value
    */
   setCache: function(name, params) {
-    let obj = Jmweb.prototype.setAppJson(name)
+    let obj = Jmweb.prototype.setAppJson(name);
     obj.key = params.key;
     obj.data = params.value;
     // console.info(obj);
@@ -520,8 +514,8 @@ Jmweb.prototype.Cache = {
 
   /**
    * 设置缓存的回调
-   * @param {string} name  // 挂载方法名字
-   * @param {string} key  // key
+   * @param {string} name 挂载方法名字
+   * @param {string} key
    */
   getCache: function(name, key) {
     let obj = Jmweb.prototype.setAppJson(name);
@@ -552,39 +546,39 @@ Jmweb.prototype.Device = {
 Jmweb.prototype.Uinav = {
   /**
    * 新建一个页面
-   * @param {string} name  // 挂载方法名字
-   * @param {string} params  // 参数
+   * @param {string} name 挂载方法名字
+   * @param {string} params 参数
    */
   newPage: function(name, params) {
     let obj = Jmweb.prototype.setAppJson(name);
-    obj.url = params.url; //地址
-    obj.param = params.param;  //参数
-    obj.title = params.title;  //次级界面标题
-    obj.playType = params.playType ? params.playType : 0; //0:默认（不使用播放器），1：RTMP，2：TUTK
+    obj.url = params.url; // 地址
+    obj.param = params.param; // 参数
+    obj.title = params.title; // 次级界面标题
+    obj.playType = params.playType ? params.playType : 0; // 0:默认（不使用播放器），1：RTMP，2：TUTK
     obj.navigationBarHidden = params.navigationBarHidden ? true : false;
     if (obj.navigationBarBackgroundColor) {
-      obj.navigationBarBackgroundColor =  params.navigationBarBackgroundColor; //导航栏背景颜色，如 #000000
+      obj.navigationBarBackgroundColor =  params.navigationBarBackgroundColor; // 导航栏背景颜色，如 #000000
     }
     if (obj.navigationBarTextStyle) {
-      obj.navigationBarTextStyle = params.navigationBarTextStyle; //导航栏标题颜色，仅支持 black / white
+      obj.navigationBarTextStyle = params.navigationBarTextStyle; // 导航栏标题颜色，仅支持 black / white
     }
     Jmweb.prototype.provider(obj, 'jm_uinav', 'newPage')
   },
 
   /**
    * 返回上一个页面（回退）
-   * @param {string} name  // 挂载方法名字
-   * @param {boolean} isReload  // 返回界面是否刷新
+   * @param {string} name 挂载方法名字
+   * @param {boolean} isReload 返回界面是否刷新
    */
   back: function (name, isReload) {
     let obj = Jmweb.prototype.setAppJson(name);
-    obj.isReload = (isReload == 1) ? 1 : 0; //地址
+    obj.isReload = (isReload == 1) ? 1 : 0; // 地址
     Jmweb.prototype.provider(obj, 'jm_uinav', 'back')
   },
 
   /**
    * 关闭界面
-   * @param {string} name  // 挂载方法名字
+   * @param {string} name 挂载方法名字
    */
   closePage: function (name) {
     let obj = Jmweb.prototype.setAppJson(name);
@@ -593,7 +587,7 @@ Jmweb.prototype.Uinav = {
 
   /**
    * 回到首页
-   * @param {string} name  // 挂载方法名字
+   * @param {string} name 挂载方法名字
    */
   toHome: function (name) {
     let obj = Jmweb.prototype.setAppJson(name);
@@ -608,8 +602,8 @@ Jmweb.prototype.Uinav = {
 Jmweb.prototype.ediFile = {
   /**
    * 上传
-   * @param {string} name  // 挂载方法名字
-   * @param {object} params  // 挂载方法名字
+   * @param {string} name 挂载方法名字
+   * @param {object} params 挂载方法名字
    */
   upload: function (name, params) {
     let obj = Jmweb.prototype.setAppJson(name);
@@ -618,7 +612,7 @@ Jmweb.prototype.ediFile = {
 };
 
 /**
- * 原trackMap.js
+ *
  * @type {{clearOverlays: Jmweb.trackMap.clearOverlays, addStays: Jmweb.trackMap.addStays, createStays: (function(*, *): []), createMarker: (function(*): BMap.Marker), createPolyline: (function(*=, *): BMap.Polyline), removeOverlay: Jmweb.trackMap.removeOverlay, createPoint: (function(*): BMap.Point), createPoints: (function(*): []), addOverlay: Jmweb.trackMap.addOverlay}}
  */
 Jmweb.prototype.trackMap = {
@@ -754,12 +748,11 @@ Jmweb.prototype.GPS = {
    */
   delta: function (lat, lng) {
     // Krasovsky 1940
-    //
     // a = 6378245.0, 1/f = 298.3
     // b = a * (1 - f)
     // ee = (a^2 - b^2) / a^2;
-    let a = 6378245.0; //  a: 卫星椭球坐标投影到平面地图坐标系的投影因子。
-    let ee = 0.00669342162296594323; //  ee: 椭球的偏心率。
+    let a = 6378245.0; // a: 卫星椭球坐标投影到平面地图坐标系的投影因子。
+    let ee = 0.00669342162296594323; // ee: 椭球的偏心率。
     let dLat = this.transformLat(lng - 105.0, lat - 35.0);
     let dLng = this.transformLng(lng - 105.0, lat - 35.0);
     let radLat = lat / 180.0 * this.PI;
@@ -961,7 +954,7 @@ Jmweb.prototype.GPS = {
 };
 
 /**
- * 蓝牙 原blue.js
+ *
  * @type {{request: Jmweb.jmBlue.request, closeBLEConnection: Jmweb.jmBlue.closeBLEConnection, clearAdapter: Jmweb.jmBlue.clearAdapter, startDevicesDiscovery: Jmweb.jmBlue.startDevicesDiscovery, writeBLECharacteristicValue: Jmweb.jmBlue.writeBLECharacteristicValue, initBle: Jmweb.jmBlue.initBle, readBLECharacteristicValue: Jmweb.jmBlue.readBLECharacteristicValue, createBLEConnection: Jmweb.jmBlue.createBLEConnection, bleType: Jmweb.jmBlue.bleType, getAdapterState: Jmweb.jmBlue.getAdapterState, notifyBLECharacteristicValueChange: Jmweb.jmBlue.notifyBLECharacteristicValueChange, stopDevicesDiscovery: Jmweb.jmBlue.stopDevicesDiscovery, getBLEDeviceCharacteristics: Jmweb.jmBlue.getBLEDeviceCharacteristics, openAdapter: Jmweb.jmBlue.openAdapter, getBLEDeviceServices: Jmweb.jmBlue.getBLEDeviceServices, getConnectedDevices: Jmweb.jmBlue.getConnectedDevices}}
  */
 Jmweb.prototype.jmBlue = {
@@ -1024,8 +1017,8 @@ Jmweb.prototype.jmBlue = {
   },
   /**
    * 连接蓝牙
-   * @param {string} deviceId  //蓝牙设备 id
-   * @param {boolean} autoConnect  //是否重连（仅安卓使用）
+   * @param {string} deviceId 蓝牙设备 id
+   * @param {boolean} autoConnect 是否重连（仅安卓使用）
    */
   createBLEConnection: function (deviceId, autoConnect) {
     let data = {
@@ -1037,7 +1030,7 @@ Jmweb.prototype.jmBlue = {
   },
   /**
    * 关闭蓝牙
-   * @param {string} deviceId  //蓝牙设备 id
+   * @param {string} deviceId 蓝牙设备 id
    */
   closeBLEConnection: function (deviceId) {
     let data = {
@@ -1058,7 +1051,7 @@ Jmweb.prototype.jmBlue = {
   },
   /**
    * 获取蓝牙设备所有 service（服务）的示例
-   * @param {string} deviceId  //蓝牙设备 id
+   * @param {string} deviceId 蓝牙设备 id
    */
   getBLEDeviceServices: function (deviceId) {
     let data = {
@@ -1070,8 +1063,8 @@ Jmweb.prototype.jmBlue = {
   },
   /**
    * 获取蓝牙设备某个服务中的所有 characteristic（特征值）
-   * @param {string} deviceId  //蓝牙设备 id
-   * @param {string} serviceId  //蓝牙服务 uuid
+   * @param {string} deviceId 蓝牙设备 id
+   * @param {string} serviceId 蓝牙服务 uuid
    */
   getBLEDeviceCharacteristics: function (deviceId, serviceId) {
     let data = {
@@ -1083,9 +1076,9 @@ Jmweb.prototype.jmBlue = {
   },
   /**
    * 读取低功耗蓝牙设备的特征值的二进制数据值
-   * @param {string} deviceId  //蓝牙设备 id
-   * @param {string} serviceId  //蓝牙服务 uuid
-   * @param {string} characteristicId  //蓝牙特征值的 uuid
+   * @param {string} deviceId 蓝牙设备 id
+   * @param {string} serviceId 蓝牙服务 uuid
+   * @param {string} characteristicId 蓝牙特征值的 uuid
    */
   readBLECharacteristicValue: function (deviceId, serviceId, characteristicId) {
     let data = {
@@ -1098,10 +1091,10 @@ Jmweb.prototype.jmBlue = {
   },
   /**
    * 向低功耗蓝牙设备特征值中写入二进制数据。
-   * @param {string} deviceId  //蓝牙设备 id
-   * @param {string} serviceId  //蓝牙服务 uuid
-   * @param {string} characteristicId  //蓝牙特征值的 uuid
-   * @param {string} value  //蓝牙设备特征值对应的二进制值
+   * @param {string} deviceId 蓝牙设备 id
+   * @param {string} serviceId 蓝牙服务 uuid
+   * @param {string} characteristicId 蓝牙特征值的 uuid
+   * @param {string} value 蓝牙设备特征值对应的二进制值
    */
   writeBLECharacteristicValue: function (deviceId, serviceId, characteristicId, value) {
     let data = {
@@ -1115,10 +1108,10 @@ Jmweb.prototype.jmBlue = {
   },
   /**
    * 向低功耗蓝牙设备特征值中写入二进制数据。
-   * @param {string} deviceId  //蓝牙设备 id
-   * @param {string} serviceId  //蓝牙服务 uuid
-   * @param {string} characteristicId  //蓝牙特征值的 uuid
-   * @param {boolean} state  //true: 启用 notify; false: 停用 notify
+   * @param {string} deviceId 蓝牙设备 id
+   * @param {string} serviceId 蓝牙服务 uuid
+   * @param {string} characteristicId 蓝牙特征值的 uuid
+   * @param {boolean} state true: 启用 notify; false: 停用 notify
    */
   notifyBLECharacteristicValueChange: function (deviceId, serviceId, characteristicId, state) {
     let data = {
@@ -1178,10 +1171,10 @@ Jmweb.prototype.jmWifi = {
 
   /**
    * 连接 Wi-Fi
-   * @param {string} ssid  //wifi名称
-   * @param {string} bssid  //wifi mac地址
-   * @param {string} capabilities  //wifi 加密方式
-   * @param {string} level  //wifi密码
+   * @param {string} ssid wifi名称
+   * @param {string} bssid wifi mac地址
+   * @param {string} capabilities wifi 加密方式
+   * @param {string} level wifi密码
    */
   connect: function (ssid, bssid, capabilities, level) {
     let data = {
@@ -1196,9 +1189,9 @@ Jmweb.prototype.jmWifi = {
 
   /**
    * 断开连接
-   * @param {string} ssid  //wifi名称
-   * @param {string} secure  //wifi加密方式
-   * @param {string} password  //wifi密码
+   * @param {string} ssid wifi名称
+   * @param {string} secure wifi加密方式
+   * @param {string} password wifi密码
    */
   disconnect: function (ssid, secure, password) {
     let data = {
