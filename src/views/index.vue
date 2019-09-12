@@ -20,8 +20,19 @@
       console.log('created')
       console.log(this)
 
-      this.storage()
-      this.date()
+      let data = {name: '小明', num: 0};
+      that.$jmweb.request({
+        url: 'authenticate',
+        // method: 'get',
+        // contentType: 'application/x-www-form-urlencoded',
+        data: data
+      }).then(function (res) {
+        console.log(res)
+      }, function (res) {
+        console.log(res)
+      })
+      // this.storage()
+      // this.date()
     },
 
     methods: {

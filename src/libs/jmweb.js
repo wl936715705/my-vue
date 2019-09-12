@@ -4,28 +4,63 @@
  * @description jimi前端公用库整合
  */
 class Jmweb {
+  /**
+   * 自定义配置
+   * config.request 请求处理配置  config.request = {dependAxios: 第三方库axios, dependQs: 第三方库qs, baseUrl: '服务器请求接口地址公共抬头部分', timeout: '请求响应时间'}
+   * @param config
+   */
   constructor (config) {
-    this.config = config || {}
+    this.config = config || {};
+    this.config.request = config.request || {}
   }
 
-  // request (obj) {
-  //   let json = {
-  //     url: obj.url || '',
-  //     method: obj.method || 'GET',
-  //     contentType: obj.contentType || 'application/json',
-  //     data: obj.data || {}
-  //   }
-  //   return new Promise(function (resolve, reject) {
-  //     axios({
-  //       url: json.url
-  //     }).then(function (res) {
-  //
-  //     }).catch(function (res) {
-  //
-  //     })
-  //   })
-  //
-  // }
+  /**
+   * 请求处理
+   * @param obj 参数设置
+   * @returns {Promise<resolve, reject>}
+   */
+  request (obj) {
+    const that = this;
+    let json = {
+      url: obj.url.indexOf('http') === -1 ? that.config.request.baseUrl + obj.url : obj.url, // 请求地址
+      method: obj.method || 'GET', // 请求方式
+      dataType: obj.dataType || 'json', // 服务器响应的数据类型
+      contentType: obj.contentType || 'application/json', // 发送数据格式
+      data: obj.data || {}, // 请求数据
+      backEnd: obj.backEnd || 'java' //后端 java研发 || php研发 请求数据转码使用
+    };
+    let data;
+    if (json.contentType === 'application/json') {
+      data = json.data
+    } else {
+      if (json.backEnd === 'java') {
+        data = that.config.request.dependQs.stringify(json.data)
+      } else {
+        data = that.getJson(json.data)
+      }
+    }
+    return new Promise(function (resolve, reject) {
+      that.config.request.dependAxios({
+        url: json.url,
+        method: json.method,
+        responseType: json.dataType,
+        headers: {
+          'content-Type': json.contentType
+        },
+        data: (json.method.toUpperCase() !== 'GET') ? data : undefined,
+        params: (json.method.toUpperCase() === 'GET') ? data : undefined,
+        timeout: that.config.request.timeout || 60000
+      }).then(function (res) {
+        if (res.status === 200) {
+          resolve && resolve(res.data)
+        } else {
+          reject && reject(res)
+        }
+      }).catch(function (res) {
+        reject && reject(res)
+      })
+    })
+  }
 
   /**
    * 区分ios和安卓返回的数据转为对象
@@ -33,7 +68,6 @@ class Jmweb {
    */
   getObject (data) {
     let obj = '';
-    console.log(typeof data)
     if (typeof data != 'object') {
       obj = JSON.parse(data)
     } else {
@@ -65,7 +99,7 @@ class Jmweb {
     let obj = {
       'command':command,
     };
-    if(data){
+    if (data) {
       obj.data = JSON.stringify(data);
     }
     return obj
@@ -147,7 +181,7 @@ class Jmweb {
    * @param  {string} children 访问方法
    */
   judge (data, method, children) {
-    console.info(data);
+    // console.info(data);
     let selectValue = '';
     let obj = '';
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
@@ -326,7 +360,7 @@ Jmweb.prototype.string = {
   getOneLen: function(str, val) {
     let num = 0;
     for(let i = 0; i < str.length; i++){
-      if(str[i] === val){
+      if (str[i] === val) {
         num++
       }
     }
@@ -479,8 +513,8 @@ Jmweb.prototype.Cache = {
     let obj = Jmweb.prototype.setAppJson(name)
     obj.key = params.key;
     obj.data = params.value;
-    console.info(obj);
-    console.info('jm_cache.set');
+    // console.info(obj);
+    // console.info('jm_cache.set');
     Jmweb.prototype.provider(obj, 'jm_cache', 'set')
   },
 
@@ -528,10 +562,10 @@ Jmweb.prototype.Uinav = {
     obj.title = params.title;  //次级界面标题
     obj.playType = params.playType ? params.playType : 0; //0:默认（不使用播放器），1：RTMP，2：TUTK
     obj.navigationBarHidden = params.navigationBarHidden ? true : false;
-    if(obj.navigationBarBackgroundColor){
+    if (obj.navigationBarBackgroundColor) {
       obj.navigationBarBackgroundColor =  params.navigationBarBackgroundColor; //导航栏背景颜色，如 #000000
     }
-    if(obj.navigationBarTextStyle){
+    if (obj.navigationBarTextStyle) {
       obj.navigationBarTextStyle = params.navigationBarTextStyle; //导航栏标题颜色，仅支持 black / white
     }
     Jmweb.prototype.provider(obj, 'jm_uinav', 'newPage')
