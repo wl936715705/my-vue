@@ -1,5 +1,5 @@
 <template>
-  <van-tabbar v-model="active" route>
+  <van-tabbar v-model="active" route inactive-color="#737373" active-color="#3c4158">
     <van-tabbar-item replace to="/">
       <span>首页</span>
       <img slot="icon" slot-scope="props" :src="props.active ? icon[0].active : icon[0].normal">
