@@ -26,8 +26,15 @@ npm test
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-
 ## 打包部署
-# 进入build/build.js文件  设置process.env.NODE_ENV = 'production' // 生产环境：production  开发环境：development
-# 进入config/index.js文件  设置build: {assetsPublicPath: './'} // 避免打包之后生产环境上的路径找不到
-# package.json package-lock.json  设置版本号
+
+``` base
+# 设置版本为生产环境还是开发环境，生产环境：production  开发环境：development
+--build/build.js  process.env.NODE_ENV = 'production'
+
+# 设置生产环境资源路径，避免打包之后生产环境上的路径找不到
+--config/index.js  build: {assetsPublicPath: './'}
+
+# 设置版本号
+package.json package-lock.json
+```
