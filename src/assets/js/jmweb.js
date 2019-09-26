@@ -15,7 +15,7 @@ class Jmweb {
   }
 
   /**
-   * 请求处理
+   * axios请求处理
    * @param obj 参数设置
    * @returns {Promise<resolve, reject>}
    */

@@ -12,13 +12,21 @@ import 'vant/lib/index.css';
 
 Vue.use(Tabbar).use(TabbarItem);
 
+let baseURL = '';
+if (process.env.NODE_ENV === 'production') {
+  baseURL = 'http://172.17.0.249:10086';
+} else {
+  baseURL = 'http://172.17.0.249:10086';
+}
 Vue.prototype.$jmweb = new Jmweb({
   request: {
-    baseUrl: 'http://172.17.0.31:9604/',
+    baseUrl: baseURL,
     dependQs: qs,
-    dependAxios: axios
+    dependAxios: axios,
+    timeout: 60000
   }
 });
+
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 

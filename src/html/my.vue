@@ -1,14 +1,13 @@
 <template>
     <div>
-      <p>这是my页面  89011489  1262</p>
+      <p>my</p>
 
       <Footer></Footer>
     </div>
 </template>
 
 <script>
-  import Footer from "../components/footer";
-
+  import Footer from "../components/Footer";
   export default {
     name: "my",
     components: {

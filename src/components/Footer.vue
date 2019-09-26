@@ -5,7 +5,7 @@
       <img slot="icon" slot-scope="props" :src="props.active ? icon[0].active : icon[0].normal">
     </van-tabbar-item>
 
-    <van-tabbar-item replace>
+    <van-tabbar-item replace to="/product">
       <span>产品</span>
       <img slot="icon" slot-scope="props" :src="props.active ? icon[1].active : icon[1].normal">
     </van-tabbar-item>
