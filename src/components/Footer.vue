@@ -1,20 +1,22 @@
 <template>
-  <van-tabbar v-model="active" route inactive-color="#737373" active-color="#3c4158">
-    <van-tabbar-item replace to="/">
-      <span>首页</span>
-      <img slot="icon" slot-scope="props" :src="props.active ? icon[0].active : icon[0].normal">
-    </van-tabbar-item>
+  <div class="footer">
+    <van-tabbar v-model="active" route inactive-color="#737373" active-color="#3c4158">
+      <van-tabbar-item replace to="/">
+        <span>首页</span>
+        <img slot="icon" slot-scope="props" :src="props.active ? icon[0].active : icon[0].normal">
+      </van-tabbar-item>
 
-    <van-tabbar-item replace to="/product">
-      <span>产品</span>
-      <img slot="icon" slot-scope="props" :src="props.active ? icon[1].active : icon[1].normal">
-    </van-tabbar-item>
+      <van-tabbar-item replace to="/product">
+        <span>产品</span>
+        <img slot="icon" slot-scope="props" :src="props.active ? icon[1].active : icon[1].normal">
+      </van-tabbar-item>
 
-    <van-tabbar-item replace to="/my">
-      <span>我的</span>
-      <img slot="icon" slot-scope="props" :src="props.active ? icon[2].active : icon[2].normal">
-    </van-tabbar-item>
-  </van-tabbar>
+      <van-tabbar-item replace to="/my">
+        <span>我的</span>
+        <img slot="icon" slot-scope="props" :src="props.active ? icon[2].active : icon[2].normal">
+      </van-tabbar-item>
+    </van-tabbar>
+  </div>
 </template>
 
 <script>
@@ -25,7 +27,6 @@
   import iconPath4 from '../assets/img/tabBar/4.png';
   import selectedIconPath4 from '../assets/img/tabBar/4_selected.png';
   export default {
-    name: 'Footer',
     data() {
       return {
         active: 0,

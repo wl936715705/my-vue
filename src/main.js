@@ -7,10 +7,10 @@ import axios from 'axios';
 import router from './router/router';
 import Jmweb from '../src/assets/js/jmweb';
 
-import { Tabbar, TabbarItem } from 'vant';
+import { NavBar, Tabbar, TabbarItem, Icon } from 'vant';
 import 'vant/lib/index.css';
 
-Vue.use(Tabbar).use(TabbarItem);
+Vue.use(NavBar).use(Tabbar).use(TabbarItem).use(Icon);
 
 let baseURL = '';
 if (process.env.NODE_ENV === 'production') {

@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import index from '../html/index';
-import product from '../html/product';
-import my from '../html/my';
+import index from '../html/index/index';
+import product from '../html/product/product';
+import my from '../html/my/my';
 
 Vue.use(Router);
 
@@ -11,17 +11,29 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: index
+      component: index,
+      meta: {
+        headText: 'index',
+        leftShow: false
+      }
     },
     {
       path: '/product',
       name: 'product',
-      component: product
+      component: product,
+      meta: {
+        headText: 'product',
+        leftShow: false
+      }
     },
     {
       path: '/my',
       name: 'my',
-      component: my
+      component: my,
+      meta: {
+        headText: 'my',
+        leftShow: false
+      }
     }
   ]
 })
