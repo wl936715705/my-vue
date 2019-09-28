@@ -2,8 +2,6 @@
   <div>
     <p>index</p>
     <div class="time">{{ time }}</div>
-
-    <Footer></Footer>
   </div>
 </template>
 

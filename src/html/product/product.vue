@@ -1,15 +1,14 @@
 <template>
   <div>
+    <router-view></router-view>
     <p>product</p>
 
     <ul class="list">
-      <li :class="index === listIndex ? 'item active' : 'item'" :data-id="item.id" v-for="(item, index) in list" @click="toProductDetail">
-        <span :data-id="item.id">这是一条数据：</span>
-        <span :data-id="item.id" @click="test">{{ item.name }}</span>
+      <li v-for="(item, index) in list" class="item" :data-id="item.id" @click="toProductDetail">
+        <span :data-id="item.id">这是第{{ index+1 }}一条数据：</span>
+        <span :data-id="item.id">{{ item.name }}</span>
       </li>
     </ul>
-
-    <Footer></Footer>
   </div>
 </template>
 
@@ -31,21 +30,32 @@
         {id: 1, name: '详情1'},
         {id: 2, name: '详情2'},
         {id: 3, name: '详情3'},
-        {id: 4, name: '详情4'}
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
+        {id: 4, name: '详情4'},
       ]
     },
     methods: {
       toProductDetail(e) {
         let that = this;
         console.log('div', e);
-        that.list.map(function (item, index) {
-          if (String(item.id) === e.target.dataset.id) {
-            that.listIndex = index;
-          }
-        });
-      },
-      test(e) {
-        console.log('span', e);
+        that.$router.push('/productDetail?id='+e.target.dataset.id);
       }
     }
   }
@@ -59,7 +69,6 @@
     align-items: center;
   }
   .item{
-    width: 50%;
     height: 30px;
     line-height: 30px;
     color: #000;

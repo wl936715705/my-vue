@@ -4,16 +4,21 @@
     <Header></Header>
 
     <!-- router -->
-    <router-view/>
+    <router-view class="container"></router-view>
+
+    <!-- footer -->
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
   import Header from "./components/Header";
+  import Footer from "./components/Footer";
   export default {
     name: 'App',
     components: {
-      Header
+      Header,
+      Footer
     }
   }
 </script>
@@ -23,9 +28,9 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
     text-align: center;
     color: #2c3e50;
-    /*margin-top: .6rem;*/
-    /*font-size: .28rem;*/
+    background: #fafafa;
   }
 </style>

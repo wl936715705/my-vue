@@ -1,8 +1,6 @@
 <template>
     <div>
       <p>my</p>
-
-      <Footer></Footer>
     </div>
 </template>
 

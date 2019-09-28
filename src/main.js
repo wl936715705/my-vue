@@ -9,6 +9,7 @@ import Jmweb from '../src/assets/js/jmweb';
 
 import { NavBar, Tabbar, TabbarItem, Icon } from 'vant';
 import 'vant/lib/index.css';
+import '../src/assets/css/main.css';
 
 Vue.use(NavBar).use(Tabbar).use(TabbarItem).use(Icon);
 

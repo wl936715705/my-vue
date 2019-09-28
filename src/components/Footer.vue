@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" v-if="$route.meta.footShow">
     <van-tabbar v-model="active" route inactive-color="#737373" active-color="#3c4158">
       <van-tabbar-item replace to="/">
         <span>首页</span>
@@ -48,15 +48,13 @@
           }
         ]
       }
-    },
-
-    methods: {
-
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .footer{
+    height: 50px;
+  }
 </style>

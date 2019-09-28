@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import index from '../html/index/index';
 import product from '../html/product/product';
+import productDetail from '../html/product/productDetail';
 import my from '../html/my/my';
 
 Vue.use(Router);
@@ -10,29 +11,34 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'index',
       component: index,
       meta: {
-        headText: 'index',
-        leftShow: false
+        title: '首页',
+        footShow: true
       }
     },
     {
       path: '/product',
-      name: 'product',
       component: product,
       meta: {
-        headText: 'product',
-        leftShow: false
+        title: '产品',
+        footShow: true
       }
     },
     {
       path: '/my',
-      name: 'my',
       component: my,
       meta: {
-        headText: 'my',
-        leftShow: false
+        title: '我的',
+        footShow: true
+      }
+    },
+    {
+      path: '/productDetail',
+      component: productDetail,
+      meta: {
+        title: '产品详情',
+        leftShow: true
       }
     }
   ]
