@@ -26,7 +26,7 @@
 
       // this.storage();
       // this.date();
-      this.request();
+      // this.request();
     },
 
     methods: {
@@ -45,8 +45,8 @@
         // const str = '{"name": "小明"}';
         const str = '"小明"';
         const json = {name: '小明'};
-        console.log(that.$jmweb.getObject(str));
-        // console.log(that.$jmweb.getJson(json));
+        // console.log(that.$jmweb.getObject(str));
+        console.log(that.$jmweb.getJson(json));
         console.log(that.$jmweb.setAppJson('test'));
 
         let arrA = [1, 2, 3];

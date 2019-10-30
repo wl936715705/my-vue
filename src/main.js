@@ -28,6 +28,13 @@ Vue.prototype.$jmweb = new Jmweb({
   }
 });
 
+router.beforeEach(function (to, from, next) {
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+  next();
+});
+
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 
