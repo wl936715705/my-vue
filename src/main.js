@@ -17,7 +17,7 @@ let baseURL = '';
 if (process.env.NODE_ENV === 'production') {
   baseURL = 'http://172.17.0.249:10086';
 } else {
-  baseURL = 'http://172.17.0.249:10086';
+  baseURL = 'http://172.17.0.249:8080';
 }
 Vue.prototype.$jmweb = new Jmweb({
   request: {

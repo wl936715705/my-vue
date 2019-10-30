@@ -25,7 +25,7 @@
       console.log(this);
 
       // this.storage();
-      // this.date();
+      this.date();
       // this.request();
     },
 
