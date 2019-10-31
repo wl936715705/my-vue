@@ -10,8 +10,8 @@ class Jmweb {
    * @param config
    */
   constructor(config) {
-    this.config = config || {};
-    this.config.request = config.request || {};
+    this.config = config ? config : {};
+    this.config.request = config ? config.request : {};
   }
 
   /**
