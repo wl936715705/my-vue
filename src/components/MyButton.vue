@@ -5,12 +5,7 @@
 <script>
   export default {
     name: "MyButton",
-    props: {
-      parentText: {
-        type: String,
-        default: ''
-      } // 引入父组件数据
-    },
+    props: ['parentText'],
     data() {
       return {
         childText: this.parentText // 将父组件数据赋值给子组件

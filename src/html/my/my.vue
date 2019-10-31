@@ -17,16 +17,20 @@
     },
     data() {
       return {
-        parentText: 'AAA'
+        parentText: 'AAA',
+        btnFlag: true
       }
     },
     methods: {
       parentClick() {
         let that = this;
-        that.parentText = 'BBB';
+        if (!that.btnFlag) return false;
+        that.btnFlag = false;
 
+        that.parentText = 'BBB';
         setTimeout(function () {
           that.parentText = 'CCC';
+          that.btnFlag = true;
         }, 2000);
       }
     }
