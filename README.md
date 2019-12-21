@@ -42,6 +42,6 @@ package.json package-lock.json
 ## @vue/cli3.x
 ``` bash
 --vue create name 创建
---npm run server 运行
+--npm run serve 运行
 --npm run build 打包编译
 ```
